@@ -13,6 +13,7 @@ const secureAPI = (roles) => {
     const tokenData = verifyJWT(token);
     if (!tokenData) throw new Error("Token invalid");
     const { data } = tokenData;
+    // Find the user , check the user, gets it role
     const isAllowed = compareRoles(data.roles, roles ?? []);
     if (!isAllowed) throw new Error("User Unauthorized");
     next();
