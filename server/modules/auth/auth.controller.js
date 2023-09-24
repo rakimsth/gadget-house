@@ -26,7 +26,7 @@ const login = async (email, password) => {
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) throw new Error("Email or Password is invalid");
   // JWT TOKEN GENERATION
-  const payload = { email: user?.email, roles: user?.roles ?? ["ADMIN"] };
+  const payload = { email: user?.email, roles: user?.roles };
   const token = generateJWT(payload);
   return { token };
 };
