@@ -7,7 +7,7 @@ const { mailer } = require("../../services/mail");
 const { generateJWT } = require("../../utils/jwt");
 
 const create = async (payload) => {
-  const { password, ...rest } = payload;
+  const { password, roles, ...rest } = payload;
   rest.password = await bcrypt.hash(password, +process.env.SALT_ROUNDS);
   await userModel.create(rest);
   const token = generateOTP();
@@ -26,7 +26,7 @@ const login = async (email, password) => {
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) throw new Error("Email or Password is invalid");
   // JWT TOKEN GENERATION
-  const payload = { email: user?.email, roles: user?.roles ?? [] };
+  const payload = { email: user?.email, roles: user?.roles ?? ["ADMIN"] };
   const token = generateJWT(payload);
   return { token };
 };

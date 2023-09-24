@@ -1,3 +1,10 @@
 const Model = require("./user.model");
 
-module.exports = {};
+const create = (payload) => {
+  return Model.create(payload);
+};
+const list = () => {
+  return Model.find();
+};
+
+module.exports = { list, create };
