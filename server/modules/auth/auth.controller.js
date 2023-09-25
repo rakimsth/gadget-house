@@ -18,7 +18,9 @@ const create = async (payload) => {
 };
 
 const login = async (email, password) => {
-  const user = await userModel.findOne({ email }).select("+password");
+  const user = await userModel
+    .findOne({ email, isArchived: false })
+    .select("+password");
   if (!user) throw new Error("User not found");
   if (!user.isActive) throw new Error("User is blocked. Please contact Admin");
   if (!user.isEmailVerified)
@@ -63,4 +65,21 @@ const regenerate = async (email) => {
   return true;
 };
 
-module.exports = { create, login, verifyEmail, regenerate };
+const forgetPassword = async (email, token, password) => {
+  const user = await userModel.findOne({ email, isArchived: false });
+  if (!user) throw new Error("User not found");
+  if (!user.isActive) throw new Error("User is blocked. Please contact Admin");
+  if (!user.isEmailVerified)
+    throw new Error("Email is not verified. Verify email to get started");
+  const isValid = verifyOTP(token);
+  if (!isValid) throw new Error("Token invalid");
+  const hashedPw = await bcrypt.hash(password, +process.env.SALT_ROUNDS);
+  await userModel.findOneAndUpdate(
+    { email },
+    { password: hashedPw },
+    { new: true }
+  );
+  return true;
+};
+
+module.exports = { create, forgetPassword, login, verifyEmail, regenerate };

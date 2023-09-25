@@ -1,4 +1,5 @@
 const { verifyJWT } = require("./jwt");
+const UserModel = require("../modules/users/user.model");
 
 const compareRoles = (user_perm, access_perm) => {
   if (access_perm.length == 0) return true;
@@ -14,7 +15,16 @@ const secureAPI = (roles) => {
     if (!tokenData) throw new Error("Token invalid");
     const { data } = tokenData;
     // Find the user , check the user, gets it role
-    const isAllowed = compareRoles(data.roles, roles ?? []);
+    const user = UserModel.findOne({
+      email: data.email,
+      isActive: true,
+      isEmailVerified: true,
+    });
+    if (!user) throw new Error("User not found");
+
+    const isAllowed = compareRoles(user.roles, roles ?? []);
+    req.currentUser = user._id;
+    req.currentRole = user.roles;
     if (!isAllowed) throw new Error("User Unauthorized");
     next();
   };
