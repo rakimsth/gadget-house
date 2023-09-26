@@ -11,7 +11,7 @@ router.get("/", secureAPI(["admin"]), async (req, res, next) => {
   }
 });
 
-router.get("/profile", secureAPI(["user"]), async (req, res, next) => {
+router.get("/profile", secureAPI(["admin", "user"]), async (req, res, next) => {
   try {
     const result = await Controller.getById(req.currentUser);
     res.json({ data: result, msg: "success" });
@@ -22,16 +22,12 @@ router.get("/profile", secureAPI(["user"]), async (req, res, next) => {
 
 router.put("/profile", secureAPI(["admin", "user"]), async (req, res, next) => {
   try {
-    if (req.currentRole.includes("admin")) {
-      const { id, ...rest } = req.body;
-      rest.created_by = req.currentUser;
-      rest.updated_by = req.currentUser;
-      const result = await Controller.updateProfile(id, rest);
-      res.json({ data: result, msg: "success" });
-    } else {
-      const result = await Controller.updateProfile(req.currentUser, req.body);
-      res.json({ data: result, msg: "success" });
-    }
+    const me = req.currentRole.includes("admin")
+      ? req.body.id
+      : req.currentUser;
+    if (!me) throw new Error("Id is missing");
+    const result = await Controller.updateProfile(me, req.body);
+    res.json({ data: result, msg: "success" });
   } catch (e) {
     next(e);
   }
@@ -39,7 +35,7 @@ router.put("/profile", secureAPI(["admin", "user"]), async (req, res, next) => {
 
 router.put("/change-password", secureAPI(["user"]), async (req, res, next) => {
   try {
-    const { oldPassword, newPassword } = payload;
+    const { oldPassword, newPassword } = req.body;
     if (!oldPassword || !newPassword) throw new Error("Passwords are missing");
     req.body.created_by = req.currentUser;
     req.body.updated_by = req.currentUser;
@@ -86,7 +82,7 @@ router.delete("/:id", secureAPI(["admin"]), async (req, res, next) => {
   }
 });
 
-router.get("/:id", secureAPI(["admin", "user"]), async (req, res, next) => {
+router.get("/:id", secureAPI(["admin"]), async (req, res, next) => {
   try {
     const result = await Controller.getById(req.params.id);
     res.json({ data: result, msg: "success" });
