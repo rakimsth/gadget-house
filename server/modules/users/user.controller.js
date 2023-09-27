@@ -57,6 +57,11 @@ const list = async (page = 1, limit = 10, search) => {
         total: 1,
         data: 1,
       },
+    },
+    {
+      $project: {
+        "data.password": 0,
+      },
     }
   );
   const result = await Model.aggregate(query);
