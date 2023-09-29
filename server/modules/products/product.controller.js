@@ -13,6 +13,11 @@ const list = async (limit = 10, page = 1, search) => {
       },
     });
   }
+  query.push({
+    $match: {
+      isArchived: search.isArchived ? true : false,
+    },
+  });
   query.push(
     {
       $sort: {
@@ -48,11 +53,6 @@ const list = async (limit = 10, page = 1, search) => {
         total: 1,
         data: 1,
       },
-    },
-    {
-      $project: {
-        "data.password": 0,
-      },
     }
   );
   const result = await Model.aggregate(query);
@@ -72,8 +72,8 @@ const updateById = (id, payload) => {
   return Model.findOneAndUpdate({ _id: id }, payload, { new: true });
 };
 
-const remove = (id) => {
-  return Model.deleteOne({ _id: id });
+const remove = (id, payload) => {
+  return Model.findOneAndUpdate({ _id: id }, payload, { new: true });
 };
 
 module.exports = { create, list, getById, updateById, remove };
