@@ -133,4 +133,9 @@ dist
 #My Testing
 playground
 .DS_Store
-public
+/server/public/products/*
+/server/public/users/*
+
+# exception to the rule
+!/server/public/products/.gitkeep 
+!/server/public/users/.gitkeep 
