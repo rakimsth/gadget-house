@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Error = () => {
   return (
     <>
@@ -10,9 +12,9 @@ const Error = () => {
           <p className="lead">
             The page you&apos;re looking for doesn&apos;t exist.
           </p>
-          <a href="/" className="btn btn-primary">
+          <Link to="/" className="btn btn-primary">
             Go Home
-          </a>
+          </Link>
         </div>
       </div>
     </>

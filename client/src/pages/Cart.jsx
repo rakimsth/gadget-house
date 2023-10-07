@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Image } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { BsArrowLeftSquare } from "react-icons/bs";
@@ -28,13 +29,13 @@ const Cart = () => {
 const EmptyCart = () => {
   return (
     <>
-      <div className="m-5 bg-body-tertiary rounded-3 text-center">
+      <div className="m-4 bg-body-tertiary rounded-3 text-center">
         <div className="container-fluid py-5">
           <h1 className="display-5 fw-bold">Your cart is empty</h1>
-          <a className="btn btn-light btn-lg" href="/products">
+          <Link to="/products" className="btn btn-light btn-lg">
             <BsArrowLeftSquare />
             &nbsp;Continue Shopping
-          </a>
+          </Link>
         </div>
       </div>
     </>

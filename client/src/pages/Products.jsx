@@ -72,6 +72,7 @@ const Products = () => {
                           <div className="product-media">
                             <a href="#">
                               <img
+                                loading="lazy"
                                 className="img-fluid"
                                 src={
                                   product?.image ||
@@ -118,7 +119,11 @@ const Products = () => {
                   );
                 })
               ) : (
-                <>No Products Found...</>
+                <div className="container">
+                  <div className="p-5 text-center text-primary">
+                    No Products Found...
+                  </div>
+                </div>
               )}
             </div>
           </div>
