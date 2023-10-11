@@ -140,6 +140,14 @@ const FullCart = ({
                 <td colSpan="5">Total Carts</td>
                 <td>{totalAmount()}</td>
               </tr>
+              <tr>
+                <td colSpan="5">
+                  <Link to="/products">Continue Shopping</Link>
+                </td>
+                <td>
+                  <Link to="/checkout">Check out Now</Link>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
