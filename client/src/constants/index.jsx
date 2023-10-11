@@ -1,5 +1,7 @@
-const SERVER_URL = "https://fakestoreapi.com";
+export const BASE_URL = "http://localhost:3444";
+
+const API_VERSION = "/api/v1";
 
 export const URLS = {
-  PRODUCTS: SERVER_URL + "/products",
+  PRODUCTS: API_VERSION + "/products",
 };

@@ -19,7 +19,7 @@ const cartSlice = createSlice({
         state.quantity++;
       } else {
         // new item
-        state.cart.push(action.payload);
+        state.cart.push({ ...action.payload, quantity: 1 });
         state.quantity++;
       }
     },
