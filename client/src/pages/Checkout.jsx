@@ -1,12 +1,23 @@
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { removeAll } from "../slices/cartSlice";
 
 export default function Checkout() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
 
   const totalAmount = () => {
     return cart.reduce((acc, obj) => acc + obj.quantity * obj.price, 0);
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Send the form data to order API
+    dispatch(removeAll());
+    navigate("/checkout/success");
+  };
+
   return (
     <>
       <div className="row">
@@ -270,7 +281,10 @@ export default function Checkout() {
             <hr className="mb-4" />
 
             <div className="d-grid gap-2">
-              <button className="btn btn-secondary btn-lg btn-block">
+              <button
+                className="btn btn-secondary btn-lg btn-block"
+                onClick={(e) => handleSubmit(e)}
+              >
                 Continue to checkout
               </button>
             </div>
