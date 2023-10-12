@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../slices/orderSlice";
 import { removeAll } from "../slices/cartSlice";
+import { BASE_URL } from "../constants";
 
 export default function Checkout() {
   const [checkoutPayload, setCheckoutPayload] = useState({
@@ -12,6 +13,10 @@ export default function Checkout() {
     country: "",
     state: "",
     pobox: "",
+  });
+  const [stripeInfo, setStripeInfo] = useState({
+    url: "",
+    stripeId: "",
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,6 +37,47 @@ export default function Checkout() {
     });
   };
 
+  const stripePayload = useCallback(() => {
+    return cart.map((item) => {
+      return {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: item?.title,
+          },
+          unit_amount: Number(item?.price) * 100,
+        },
+        quantity: Number(item?.quantity),
+      };
+    });
+  }, [cart]);
+
+  const sendStripePayload = useCallback(async () => {
+    try {
+      const response = await fetch(BASE_URL + "/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(stripePayload()),
+      });
+      const result = await response.json();
+      setStripeInfo((prev) => {
+        return {
+          ...prev,
+          url: result?.data?.url,
+          stripeId: result?.data?.stripeId,
+        };
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }, [stripePayload]);
+
+  useEffect(() => {
+    sendStripePayload();
+  }, [sendStripePayload]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = checkoutPayload;
@@ -39,12 +85,12 @@ export default function Checkout() {
     rest.address = address.concat(", ", state, ", ", pobox, ", ", country);
     rest.total = totalAmount();
     rest.products = productItems();
+    rest.stripeId = stripeInfo?.stripeId;
     // Send the form data to order API
     const order = await dispatch(createOrder(rest));
-    console.log({ order });
     if (order && order.payload.msg === "success") {
       dispatch(removeAll());
-      navigate("/checkout/success");
+      window.location.replace(stripeInfo?.url);
     }
   };
 

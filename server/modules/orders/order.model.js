@@ -25,6 +25,7 @@ const orderSchema = new Schema({
     required: true,
     default: "COD",
   },
+  stripeId: { type: String },
   name: { type: String, required: true },
   email: { type: String },
   address: { type: String },
