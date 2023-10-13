@@ -29,7 +29,11 @@ const orderSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String },
   address: { type: String },
-  status: { type: String, enum: ["pending", "completed"], default: "pending" },
+  status: {
+    type: String,
+    enum: ["pending", "completed", "failed"],
+    default: "pending",
+  },
   ...commonSchema,
 });
 
