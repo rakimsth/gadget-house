@@ -15,13 +15,13 @@
 6. Create the env in the backend for these keys
 
 <hr>
-<b>DO this is index.js file of backend</b> 
+<b>Do this in index.js file of backend</b> 
 <hr>
 
 7. Use the doc, to create the checkout session api endpoint
 
 <hr>
-<b>DO this is checkout.jsx file of frontend</b> 
+<b>Do this in checkout.jsx file of frontend</b> 
 <hr>
 
 8. replace the hardcoded line items with cart items in the front end. (use your logic to create line item payload)
@@ -29,3 +29,19 @@
 9. Bind the API in the checkout page in react app using useCallback and useEffect Hook
 
 10. Redirect the user to checkout page using window.location.replace
+
+<hr>
+<b>Do this to allow stripe to update the order </b> 
+<hr>
+
+11. Create the webhook endpoint in the index.js
+
+12. Convert endpointsecret as env variables
+
+13. Make sure that express.json() middleware comes after the webhook endpoint. Because we are using raw data from express instead of JSON data
+
+14. Add all the event associated with checkout session.
+
+15. Create order controller function to handle the stripe event calls such as order expired/ success
+
+16. Incase of failed transaction, mark the order as failed and restock the orders product item back to product stock.
