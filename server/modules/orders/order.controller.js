@@ -4,21 +4,21 @@ const productModel = require("../products/product.model");
 
 const create = (payload) => {
   payload.id = uuidv4();
-  // const products = payload?.products;
-  // // check the products in order
-  // products.map(async (product) => {
-  //   const { product: id, quantity } = product;
-  //   // check if product exist or not
-  //   const isExistingProduct = await productModel.findOne({ _id: id });
-  //   if (!isExistingProduct) throw new Error("Product not found");
-  //   // Update the product quantity with deletedOrder Product Quantity
-  //   const newQuantity = isExistingProduct?.quantity - quantity;
-  //   return await productModel.findOneAndUpdate(
-  //     { _id: id },
-  //     { quantity: newQuantity },
-  //     { new: true }
-  //   );
-  // });
+  const products = payload?.products;
+  // check the products in order
+  products.map(async (product) => {
+    const { product: id, quantity } = product;
+    // check if product exist or not
+    const isExistingProduct = await productModel.findOne({ _id: id });
+    if (!isExistingProduct) throw new Error("Product not found");
+    // Update the product quantity with deletedOrder Product Quantity
+    const newQuantity = isExistingProduct?.quantity - quantity;
+    return await productModel.findOneAndUpdate(
+      { _id: id },
+      { quantity: newQuantity },
+      { new: true }
+    );
+  });
   return Model.create(payload);
 };
 
@@ -136,7 +136,21 @@ const updateOrderByStripe = async (data, type) => {
       { new: true }
     );
     if (failedTxn) {
-      // restock the products
+      const products = failedTxn?.products;
+      // check the products in order
+      products.map(async (product) => {
+        const { product: id, quantity } = product;
+        // check if product exist or not
+        const isExistingProduct = await productModel.findOne({ _id: id });
+        if (!isExistingProduct) throw new Error("Product not found");
+        // Update the product quantity with deletedOrder Product Quantity
+        const newQuantity = isExistingProduct?.quantity + quantity;
+        return await productModel.findOneAndUpdate(
+          { _id: id },
+          { quantity: newQuantity },
+          { new: true }
+        );
+      });
     }
     return failedTxn;
   }

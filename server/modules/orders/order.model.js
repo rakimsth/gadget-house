@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-// const { ObjectId } = Schema.Types;
+const { ObjectId } = Schema.Types;
 const commonSchema = require("../../utils/commonSchema");
 
 const orderSchema = new Schema({
@@ -11,18 +11,13 @@ const orderSchema = new Schema({
       quantity: { type: Number, required: true },
       price: { type: Number, required: true },
       amount: { type: Number, required: true },
-      product: { type: String, required: true },
+      product: { type: ObjectId, ref: "Product", required: true },
     },
   ],
   paymentMethod: {
     type: String,
     required: true,
-    enum: ["COD", "PAYPAL", "CC"],
-    default: "COD",
-  },
-  payment: {
-    type: String,
-    required: true,
+    enum: ["COD", "STRIPE"],
     default: "COD",
   },
   stripeId: { type: String },

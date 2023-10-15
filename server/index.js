@@ -70,11 +70,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post("/create-checkout-session", async (req, res, next) => {
   try {
+    const dt = new Date();
+    dt.setMinutes(dt.getMinutes() + 30);
     const session = await stripe.checkout.sessions.create({
       line_items: req.body,
       mode: "payment",
       success_url: `${FRONTEND_URL}/checkout/success`,
       cancel_url: `${FRONTEND_URL}/checkout/failed`,
+      expires_at: dt,
     });
 
     res.json({

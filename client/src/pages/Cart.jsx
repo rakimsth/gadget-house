@@ -3,16 +3,19 @@ import { Image } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { BsArrowLeftSquare } from "react-icons/bs";
 
+import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeItem,
 } from "../slices/cartSlice";
+import { fetchProducts } from "../slices/productSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
+  const { products } = useSelector((state) => state.products);
 
   const totalAmount = () => {
     return cart.reduce((acc, obj) => acc + obj.quantity * obj.price, 0);
@@ -32,11 +35,20 @@ const Cart = () => {
     }
   };
 
+  const initFetch = useCallback(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    initFetch();
+  }, [initFetch]);
+
   return (
     <>
       {cart.length > 0 ? (
         <FullCart
           items={cart}
+          products={products}
           decrease={decrease}
           increase={increase}
           removeFromCart={removeFromCart}
@@ -69,6 +81,7 @@ const FullCart = ({
   decrease,
   increase,
   items,
+  products,
   removeFromCart,
   totalAmount,
 }) => {
@@ -83,6 +96,7 @@ const FullCart = ({
                 <th>Name</th>
                 <th>Image</th>
                 <th>Price</th>
+                <th>Avail Quantity</th>
                 <th>Quantity</th>
                 <th>Total Price</th>
                 <th></th>
@@ -93,24 +107,30 @@ const FullCart = ({
                 return (
                   <tr key={index}>
                     <td>
-                      {item?.title.length > 75
-                        ? item?.title.substring(0, 75).concat("...")
-                        : item?.title}
+                      {item?.name.length > 75
+                        ? item?.name.substring(0, 75).concat("...")
+                        : item?.name}
                     </td>
                     <td>
                       <Image
                         width={40}
                         height={40}
-                        src={item?.image}
+                        src={item?.images[0]}
                         thumbnail
                       />
                     </td>
                     <td>{item?.price}</td>
                     <td>
+                      {
+                        products.find((product) => item?._id === product?._id)
+                          ?.quantity
+                      }
+                    </td>
+                    <td>
                       <span
                         className="btn btn-primary"
                         style={{ margin: "2px" }}
-                        onClick={() => decrease(item?.id)}
+                        onClick={() => decrease(item?._id)}
                       >
                         -
                       </span>
@@ -118,7 +138,7 @@ const FullCart = ({
                       <span
                         className="btn btn-primary"
                         style={{ margin: "2px" }}
-                        onClick={() => increase(item?.id)}
+                        onClick={() => increase({ id: item?._id, products })}
                       >
                         +
                       </span>
@@ -129,7 +149,7 @@ const FullCart = ({
                         color="red"
                         size={24}
                         onClick={() => {
-                          removeFromCart(item?.id);
+                          removeFromCart(item?._id);
                         }}
                       />
                     </td>
@@ -137,7 +157,7 @@ const FullCart = ({
                 );
               })}
               <tr>
-                <td colSpan="5">Total Carts</td>
+                <td colSpan="5">Total Cart (NPR)</td>
                 <td>{totalAmount()}</td>
               </tr>
               <tr>
