@@ -4,16 +4,23 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { addToCart } from "../slices/cartSlice";
-import { fetchProducts } from "../slices/productSlice";
+import {
+  fetchProducts,
+  setCurrentPage,
+  setLimit,
+} from "../slices/productSlice";
 import SkeletalLoading from "../components/SkeletalLoading";
+import Paginate from "../components/Paginate";
 
 const Products = () => {
-  const { products, loading } = useSelector((state) => state.products);
+  const { products, total, limit, currentPage, loading } = useSelector(
+    (state) => state.products
+  );
   const dispatch = useDispatch();
 
   const initFetch = useCallback(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(fetchProducts({ limit, page: currentPage }));
+  }, [dispatch, limit, currentPage]);
 
   useEffect(() => {
     initFetch();
@@ -122,6 +129,14 @@ const Products = () => {
                   {/*  */}
                 </div>
               )}
+              <Paginate
+                total={total}
+                limit={limit}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                setLimit={setLimit}
+                dispatch={dispatch}
+              />
             </div>
           </div>
         </section>

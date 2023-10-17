@@ -170,6 +170,136 @@ var setup = {
       ],
     });
     console.log("---------DONE----------");
+    console.log("===========Creating Products -2 ===========");
+    await productController.create({
+      name: "New One Tshirt",
+      brand: "Zara",
+      price: 1500,
+      quantity: 10,
+      description: "Best Tshirt in the market",
+      sku: "t-010",
+      category: cat1?._id,
+      images: [
+        "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+        "https://www.jiomart.com/images/product/original/rvowvf0akl/eyebogler-men-s-polo-neck-regular-fit-half-sleeves-colorblocked-teal-t-shirt-product-images-rvowvf0akl-0-202211051905.jpg?im=Resize=(500,630)",
+        "https://thehouseofrare.com/cdn/shop/products/IMG_0053_5c650849-9d9d-4cc3-8863-6a23778cd9a0.jpg?v=1675170808",
+      ],
+    });
+    await productController.create({
+      name: "New Two Jeans",
+      brand: "Zara",
+      price: 2500,
+      quantity: 5,
+      description: "Best Jeans in the market",
+      sku: "J-010",
+      category: cat2?._id,
+      images: [
+        "https://cdn.pixelbin.io/v2/black-bread-289bfa/iix9pB/wrkr/t.resize(h:600,w:510)/data/gas/21072022/410316769_A222_1.jpg",
+      ],
+    });
+    await productController.create({
+      name: "High Skinny Tight Jeans Three",
+      brand: "Tommys",
+      price: 2500,
+      quantity: 0,
+      description: "Best Skinny Fit Jeans in the market",
+      sku: "J-012",
+      category: cat2?._id,
+      images: [
+        "https://thumbs.dreamstime.com/b/blue-jeans-isolated-white-34440719.jpg",
+      ],
+    });
+    await productController.create({
+      name: "New Three Tshirt",
+      brand: "Zara",
+      price: 1500,
+      quantity: 10,
+      description: "Best Tshirt in the market",
+      sku: "t-022",
+      category: cat1?._id,
+      images: [
+        "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+        "https://www.jiomart.com/images/product/original/rvowvf0akl/eyebogler-men-s-polo-neck-regular-fit-half-sleeves-colorblocked-teal-t-shirt-product-images-rvowvf0akl-0-202211051905.jpg?im=Resize=(500,630)",
+        "https://thehouseofrare.com/cdn/shop/products/IMG_0053_5c650849-9d9d-4cc3-8863-6a23778cd9a0.jpg?v=1675170808",
+      ],
+    });
+    await productController.create({
+      name: "New Blue Three Jeans",
+      brand: "Zara",
+      price: 2500,
+      quantity: 5,
+      description: "Best Jeans in the market",
+      sku: "J-023",
+      category: cat2?._id,
+      images: [
+        "https://cdn.pixelbin.io/v2/black-bread-289bfa/iix9pB/wrkr/t.resize(h:600,w:510)/data/gas/21072022/410316769_A222_1.jpg",
+      ],
+    });
+    await productController.create({
+      name: "New High Skinny Tight Two Jeans",
+      brand: "Tommys",
+      price: 2500,
+      quantity: 0,
+      description: "Best Skinny Fit Jeans in the market",
+      sku: "J-024",
+      category: cat2?._id,
+      images: [
+        "https://thumbs.dreamstime.com/b/blue-jeans-isolated-white-34440719.jpg",
+      ],
+    });
+    await productController.create({
+      name: "New Black Four Tshirt",
+      brand: "Zara",
+      price: 1500,
+      quantity: 10,
+      description: "Best Tshirt in the market",
+      sku: "t-044",
+      category: cat1?._id,
+      images: [
+        "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+        "https://www.jiomart.com/images/product/original/rvowvf0akl/eyebogler-men-s-polo-neck-regular-fit-half-sleeves-colorblocked-teal-t-shirt-product-images-rvowvf0akl-0-202211051905.jpg?im=Resize=(500,630)",
+        "https://thehouseofrare.com/cdn/shop/products/IMG_0053_5c650849-9d9d-4cc3-8863-6a23778cd9a0.jpg?v=1675170808",
+      ],
+    });
+    await productController.create({
+      name: "New Blue Four Jeans",
+      brand: "Zara",
+      price: 2500,
+      quantity: 5,
+      description: "Best Jeans in the market",
+      sku: "J-044",
+      category: cat2?._id,
+      images: [
+        "https://cdn.pixelbin.io/v2/black-bread-289bfa/iix9pB/wrkr/t.resize(h:600,w:510)/data/gas/21072022/410316769_A222_1.jpg",
+      ],
+    });
+    await productController.create({
+      name: "New High Skinny Tight Three Jeans",
+      brand: "Tommys",
+      price: 2500,
+      quantity: 0,
+      description: "Best Skinny Fit Jeans in the market",
+      sku: "J-025",
+      category: cat2?._id,
+      images: [
+        "https://thumbs.dreamstime.com/b/blue-jeans-isolated-white-34440719.jpg",
+      ],
+    });
+    await productController.create({
+      name: "Black Five Tshirt",
+      brand: "Zara",
+      price: 1500,
+      quantity: 10,
+      description: "Best Tshirt in the market",
+      sku: "t-025",
+      category: cat1?._id,
+      images: [
+        "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+        "https://www.jiomart.com/images/product/original/rvowvf0akl/eyebogler-men-s-polo-neck-regular-fit-half-sleeves-colorblocked-teal-t-shirt-product-images-rvowvf0akl-0-202211051905.jpg?im=Resize=(500,630)",
+        "https://thehouseofrare.com/cdn/shop/products/IMG_0053_5c650849-9d9d-4cc3-8863-6a23778cd9a0.jpg?v=1675170808",
+      ],
+    });
+    console.log("---------DONE----------");
   },
 };
 setup.initialize();

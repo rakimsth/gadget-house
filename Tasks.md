@@ -48,3 +48,11 @@ Steps involved in Pagination in Product Page
 13. Limit Dropdown
     a. select/option
     b. onchange dispatch(setLimit(limit)) -->
+
+Complex / Advanced Pagination Logic
+
+1. First Button => currentpage to 1
+2. Prev Button => currentpage set to currentpage -1
+3. Ellipses ... => look into usePagination Hook
+4. Next Button => currentpage set to currentpage+1
+5. Last Button => currentpage set to totalNumberofPages
