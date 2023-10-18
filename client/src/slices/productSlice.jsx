@@ -55,14 +55,14 @@ const productSlice = createSlice({
       })
       .addCase(getProductById.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.product = action.payload.data;
       })
       .addCase(getProductById.pending, (state) => {
         state.loading = true;
       })
       .addCase(getProductById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.error.message;
       });
   },
 });

@@ -1,4 +1,6 @@
 const Model = require("./product.model");
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Types;
 
 const create = async (payload) => {
   return Model.create(payload);
@@ -64,8 +66,35 @@ const list = async (limit = 10, page = 1, search) => {
   };
 };
 
-const getById = (id) => {
-  return Model.findOne({ _id: id });
+const getById = async (id) => {
+  const product = await Model.aggregate([
+    {
+      $match: {
+        _id: new ObjectId(id),
+      },
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "category_name",
+      },
+    },
+    {
+      $unwind: {
+        path: "$category_name",
+        preserveNullAndEmptyArrays: false,
+      },
+    },
+    {
+      $addFields: {
+        category_name: "$category_name.name",
+      },
+    },
+  ]);
+  if (product.length === 0) return {};
+  return product[0];
 };
 
 const updateById = (id, payload) => {
