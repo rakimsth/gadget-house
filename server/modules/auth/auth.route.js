@@ -10,7 +10,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.get("/login", async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) throw new Error("Email or password is missing");

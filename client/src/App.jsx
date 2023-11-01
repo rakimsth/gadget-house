@@ -34,6 +34,21 @@ export default function App() {
             <div className="container mt-2 mb-5">
               <Routes>
                 <Route path="/" element=<Home /> />
+                {adminRoutes
+                  ? adminRoutes.map((route, index) => {
+                      return (
+                        <Route
+                          key={index}
+                          path={`/admin${route?.path}`}
+                          element={
+                            <PrivateRoute role={route?.role ?? ""}>
+                              {route?.component}
+                            </PrivateRoute>
+                          }
+                        />
+                      );
+                    })
+                  : null}
                 <Route path="/login" element=<Login /> />
                 <Route path="/about" element=<About /> />
                 <Route path="/cart" element=<Cart /> />
@@ -50,21 +65,7 @@ export default function App() {
                 <Route path="/contact" element=<Contact /> />
                 <Route path="/products" element=<Products /> />
                 <Route path="/products/:id" element=<ProductDetail /> />
-                {adminRoutes
-                  ? adminRoutes.map((route, index) => {
-                      return (
-                        <Route
-                          key={index}
-                          path={`/admin${route?.path}`}
-                          element={
-                            <PrivateRoute role={route?.role ?? ""}>
-                              {route?.component}
-                            </PrivateRoute>
-                          }
-                        />
-                      );
-                    })
-                  : null}
+
                 <Route path="*" element=<Error /> />
               </Routes>
             </div>

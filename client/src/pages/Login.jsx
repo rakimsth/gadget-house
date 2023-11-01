@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Button, Col, Form, Row, Tab, Tabs } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { Alert, Button, Col, Form, Row, Tab, Tabs } from "react-bootstrap";
+
+import instance from "../utils/api";
+import { URLS } from "../constants";
+import { setToken } from "../utils/session";
 
 const Login = () => {
   const [key, setKey] = useState("login");
@@ -91,20 +96,76 @@ const SignUpForm = () => {
 };
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [signIn, setSignIn] = useState({ email: "", password: "" });
+
+  const handleSubmit = async (e) => {
+    try {
+      setLoading(true);
+      e.preventDefault();
+      if (!signIn?.email || !signIn?.password) return;
+      const { data } = await instance.post(`${URLS.AUTH}/login`, signIn);
+      const { token } = data.data;
+      setToken(token);
+      navigate("/admin/dashboard");
+    } catch (e) {
+      console.log(e);
+      const errMsg = e?.response ? e.response.data.msg : "Something went wrong";
+      setError(errMsg);
+    } finally {
+      setLoading(false);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+      setSignIn({ email: "", password: "" });
+    }
+  };
+
   return (
-    <Form className="d-grid gap-2">
+    <Form
+      className="d-grid gap-2"
+      onSubmit={(e) => {
+        handleSubmit(e);
+      }}
+    >
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" />
+        <Form.Control
+          type="email"
+          placeholder="Enter email"
+          value={signIn?.email}
+          onChange={(e) => {
+            setSignIn((prev) => {
+              return { ...prev, email: e.target.value };
+            });
+          }}
+        />
         <Form.Text className="text-muted">
           We&apos;ll never share your email with anyone else.
         </Form.Text>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
+        <Form.Control
+          type="password"
+          placeholder="Password"
+          value={signIn?.password}
+          onChange={(e) => {
+            setSignIn((prev) => {
+              return { ...prev, password: e.target.value };
+            });
+          }}
+        />
       </Form.Group>
-      <Button variant="primary" type="submit" size="lg">
+      {error ? <Alert variant="danger">{error}</Alert> : null}
+      <Button
+        variant="primary"
+        type="submit"
+        size="lg"
+        disabled={loading ? true : false}
+      >
         Login
       </Button>
     </Form>
