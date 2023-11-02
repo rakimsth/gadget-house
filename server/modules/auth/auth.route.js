@@ -21,7 +21,7 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.get("/verify", async (req, res, next) => {
+router.post("/verify", async (req, res, next) => {
   try {
     const { email, token } = req.body;
     if (!email || !token) throw new Error("Email or Token is missing");
@@ -32,7 +32,7 @@ router.get("/verify", async (req, res, next) => {
   }
 });
 
-router.get("/regenerate", async (req, res, next) => {
+router.post("/regenerate", async (req, res, next) => {
   try {
     const { email } = req.body;
     if (!email) throw new Error("Email is missing");
