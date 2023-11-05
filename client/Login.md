@@ -27,3 +27,34 @@ New User Registeration and try to login
 <!-- 4. axios the registeration api to register the user -->
 <!-- 5. success msg => verify component => email/ token state => verify api call => success => redirect user to login page -->
 <!-- 6. fail => clear the state and remain in signup page -->
+
+Auth Routing (admin)
+
+2 parts of our application
+
+1. Guest (Any user; role="")
+
+   - list
+   - read
+
+2. Admin (special access; role="admin")
+   - list
+   - read
+   - update
+   - delete
+
+Routing
+
+- Private (JWT Token === valid ? <allow access to the page> : "login page redirect")
+- Protected (JWT TOKEN === valid && ROLE === 'admin" ? <allow access to the page> : "login page redirect")
+- Guest
+
+Steps:
+
+1. Check for access token in LS
+2. decode access_token using jwt-decode pacakge
+3. we will get exp, email, roles
+4. use exp to find if the access-token is valid or not
+5. allow 2nd check, role check
+   a. compare token role with allowed role => match? => allow access to children component
+   b. throw to dashboard if role doesnt match
