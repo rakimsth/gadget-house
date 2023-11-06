@@ -1,12 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Stack } from "react-bootstrap";
-
 import { BiLogOut } from "react-icons/bi";
+import { useSelector, useDispatch } from "react-redux";
+
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
+import { setLogOut } from "../slices/authSlice";
+import { removeToken } from "../utils/session";
+
 function AdminNavBar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
+
+  const handleLogOut = (e) => {
+    e.preventDefault();
+    dispatch(setLogOut());
+    removeToken();
+    navigate("/login");
+  };
   return (
     <Navbar fixed="top" expand="lg" className="bg-body-tertiary">
       <Container fluid>
@@ -52,8 +66,13 @@ function AdminNavBar() {
           </Nav>
           <div className="p-1">
             <Stack gap={1} direction="horizontal">
+              <div className="p-2">
+                {isLoggedIn && user ? (
+                  <strong>Welcome {user?.name}</strong>
+                ) : null}
+              </div>
               <Link className="btn btn-outline-secondary">
-                <BiLogOut size={24} />
+                <BiLogOut size={24} onClick={handleLogOut} />
               </Link>
             </Stack>
           </div>

@@ -16,9 +16,7 @@ export const validRole = (role) => {
   if (role === "") return true;
   const token = getToken("access_token");
   const { data: user } = jwtDecode(token);
-  console.log(user.roles, role);
   const isValid = user.roles.includes(role);
-  console.log(isValid);
   if (!isValid) return false;
   return true;
 };

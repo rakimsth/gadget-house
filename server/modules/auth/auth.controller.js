@@ -30,7 +30,10 @@ const login = async (email, password) => {
   // JWT TOKEN GENERATION
   const payload = { email: user?.email, roles: user?.roles };
   const token = generateJWT(payload);
-  return { token };
+  return {
+    user: { name: user?.name, email: user?.email, roles: user?.roles },
+    token,
+  };
 };
 
 const verifyEmail = async (emailP, tokenP) => {

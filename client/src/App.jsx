@@ -1,4 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { PrivateRoute } from "./components/Routes";
+// Layout
+import Layout from "./layouts/Layout";
+import AdminLayout from "./layouts/AdminLayout";
+
+// Default Routes
 import About from "./pages/About";
 import Cart from "./pages/Cart";
 import { CheckoutPage } from "./components/CheckoutStatus";
@@ -9,13 +15,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
+
 // Admin Routes
 import Dashboard from "./pages/admin/Products";
 import AdminProducts from "./pages/admin/Products";
-
-import { PrivateRoute } from "./components/Routes";
-import Layout from "./layouts/Layout";
-import AdminLayout from "./layouts/AdminLayout";
 
 export default function App() {
   return (
@@ -47,29 +50,29 @@ export default function App() {
             </Route>
             <Route path="/admin" element={<AdminLayout />}>
               <Route
-                path="/dashboard"
+                path="/admin/dashboard"
                 element={<PrivateRoute role={""}>{<Dashboard />}</PrivateRoute>}
               />
               <Route
-                path="/products"
+                path="/admin/products"
                 element={
                   <PrivateRoute role="admin">{<AdminProducts />}</PrivateRoute>
                 }
               />
               <Route
-                path="/categories"
+                path="/admin/categories"
                 element={
                   <PrivateRoute role="admin">{<AdminProducts />}</PrivateRoute>
                 }
               />
               <Route
-                path="/orders"
+                path="/admin/orders"
                 element={
                   <PrivateRoute role="admin">{<AdminProducts />}</PrivateRoute>
                 }
               />
               <Route
-                path="/users"
+                path="/admin/users"
                 element={
                   <PrivateRoute role="admin">{<AdminProducts />}</PrivateRoute>
                 }
@@ -81,7 +84,3 @@ export default function App() {
     </>
   );
 }
-
-//Public Route: anybody can access
-//Private Route: public route + access token check
-//Protected Route: private route + role check

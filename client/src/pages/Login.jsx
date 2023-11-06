@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Alert, Button, Col, Form, Row, Tab, Tabs } from "react-bootstrap";
 
 import instance from "../utils/api";
 import { URLS } from "../constants";
 import { setToken } from "../utils/session";
+import { setUser } from "../slices/authSlice";
 
 const Login = () => {
   const [key, setKey] = useState("login");
@@ -152,6 +154,7 @@ const SignUpForm = () => {
 };
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -163,8 +166,10 @@ const LoginForm = () => {
       e.preventDefault();
       if (!signIn?.email || !signIn?.password) return;
       const { data } = await instance.post(`${URLS.AUTH}/login`, signIn);
-      const { token } = data.data;
+      const { user, token } = data.data;
+      dispatch(setUser(user));
       setToken(token);
+      // set the user state
       navigate("/admin/dashboard");
     } catch (e) {
       console.log(e);

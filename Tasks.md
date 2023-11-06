@@ -103,3 +103,19 @@ Complex / Advanced Pagination Logic
 9. if not empty, return first item of array; return product[0]
 
 10. In product detail page, fix product?.category to product?.category_name -->
+
+1. Welcome User name on login
+
+a. Add user information in the login api url
+b. Get the user information from login api url and store it someway (context, redux) and somewhere globally 
+    1. create authSlice 
+    2. store that slice and persist it
+c. use that data in the adminnavbar
+    1. Set the state during login
+    2. use that state in the AdminNavbar to show the user
+2. Logout Button
+    1. User should use the logout button to trigger the logout state 
+    action from authSlice
+    2. Remove access token from the LS
+    3. navigate the user to login page
+3. product list
