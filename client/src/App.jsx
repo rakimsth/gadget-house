@@ -17,8 +17,13 @@ import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 
 // Admin Routes
-import Dashboard from "./pages/admin/Products";
-import AdminProducts from "./pages/admin/Products";
+import Dashboard from "./pages/admin/Dashboard";
+import {
+  AddCategory,
+  EditCategory,
+  ListCategory,
+} from "./pages/admin/categories";
+import { AddProduct, EditProduct, ListProducts } from "./pages/admin/products";
 
 export default function App() {
   return (
@@ -50,31 +55,44 @@ export default function App() {
             </Route>
             <Route path="/admin" element={<AdminLayout />}>
               <Route
+                index
                 path="/admin/dashboard"
                 element={<PrivateRoute role={""}>{<Dashboard />}</PrivateRoute>}
               />
               <Route
                 path="/admin/products"
                 element={
-                  <PrivateRoute role="admin">{<AdminProducts />}</PrivateRoute>
+                  <PrivateRoute role="admin">{<ListProducts />}</PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin/products/add"
+                element={
+                  <PrivateRoute role="admin">{<AddProduct />}</PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin/products/:id"
+                element={
+                  <PrivateRoute role="admin">{<EditProduct />}</PrivateRoute>
                 }
               />
               <Route
                 path="/admin/categories"
                 element={
-                  <PrivateRoute role="admin">{<AdminProducts />}</PrivateRoute>
+                  <PrivateRoute role="admin">{<ListCategory />}</PrivateRoute>
                 }
               />
               <Route
-                path="/admin/orders"
+                path="/admin/categories/add"
                 element={
-                  <PrivateRoute role="admin">{<AdminProducts />}</PrivateRoute>
+                  <PrivateRoute role="admin">{<AddCategory />}</PrivateRoute>
                 }
               />
               <Route
-                path="/admin/users"
+                path="/admin/categories/:id"
                 element={
-                  <PrivateRoute role="admin">{<AdminProducts />}</PrivateRoute>
+                  <PrivateRoute role="admin">{<EditCategory />}</PrivateRoute>
                 }
               />
             </Route>
