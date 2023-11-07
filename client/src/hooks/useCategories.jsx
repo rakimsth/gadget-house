@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import instance from "../utils/api";
 import { URLS } from "../constants";
 
-const useProduct = () => {
+const useCategories = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,9 +13,9 @@ const useProduct = () => {
   const list = useCallback(async () => {
     try {
       setLoading(true);
-      const { data } = await instance.get(URLS.PRODUCTS);
+      const { data } = await instance.get(URLS.CATEGORIES);
       setData(data?.data?.data);
-      return data?.data?.data;
+      return data.data.data;
     } catch (e) {
       const errMsg = e.response ? e.response.data.msg : "something went wrong";
       setError(errMsg);
@@ -24,25 +24,6 @@ const useProduct = () => {
       setLoading(false);
     }
   }, []);
-
-  const create = async (payload) => {
-    try {
-      setLoading(true);
-      const { data } = await instance.post(URLS.PRODUCTS, payload, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setData(data?.data);
-      return data;
-    } catch (e) {
-      const errMsg = e.response ? e.response.data.msg : "something went wrong";
-      setError(errMsg);
-      throw errMsg;
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getById = async () => {};
 
@@ -56,7 +37,6 @@ const useProduct = () => {
     loading,
     msg,
     pagination,
-    create,
     list,
     getById,
     remove,
@@ -64,4 +44,4 @@ const useProduct = () => {
   };
 };
 
-export default useProduct;
+export default useCategories;

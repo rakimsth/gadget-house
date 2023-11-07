@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Table } from "react-bootstrap";
 
-import { useProduct } from "../../../hooks/useProduct";
+import useProduct from "../../../hooks/useProduct";
 
 export default function ListProducts() {
   const { data, error, list } = useProduct();
