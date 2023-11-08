@@ -1,22 +1,47 @@
-import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect } from "react";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
-
+import Swal from "sweetalert2";
 import useProduct from "../../../hooks/useProduct";
 
 export default function ListProducts() {
-  const { data, error, list } = useProduct();
+  const navigate = useNavigate();
+  const { data, list, remove } = useProduct();
 
   const fetchProduct = useCallback(async () => {
     await list();
   }, [list]);
 
-  console.log(data);
+  const handleRemove = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
+      if (result.isConfirmed) {
+        const resp = await remove(id);
+        if (resp.msg === "success") {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Data deleted successfully",
+            icon: "success",
+          });
+        }
+      }
+    } catch (e) {
+      alert(e);
+    }
+  };
 
   useEffect(() => {
     fetchProduct();
   }, [fetchProduct]);
-
   return (
     <div>
       <h1 className="text-center">Products</h1>
@@ -44,7 +69,17 @@ export default function ListProducts() {
                   <td>{product?.name}</td>
                   <td>{product?.quantity}</td>
                   <td>{product?.price}</td>
-                  <td>edit, delete button</td>
+                  <td className="text-center">
+                    <FaEdit
+                      onClick={() => {
+                        navigate(`/admin/products/${product?._id}`);
+                      }}
+                    />
+                    <FaTrashAlt
+                      color="red"
+                      onClick={() => handleRemove(product?._id)}
+                    />
+                  </td>
                 </tr>
               );
             })

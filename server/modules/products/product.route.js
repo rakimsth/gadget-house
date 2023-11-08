@@ -61,8 +61,8 @@ router.put(
   upload.array("images", 4),
   async (req, res, next) => {
     try {
-      if (req.files) {
-        req.body.images = req.body.images || [];
+      if (req.files && req.files.length > 0) {
+        req.body.images = [];
         req.files.map((file) =>
           req.body.images.push("products/".concat(file.filename))
         );
