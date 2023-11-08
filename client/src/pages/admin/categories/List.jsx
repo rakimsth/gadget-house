@@ -44,7 +44,7 @@ export default function ListCategory() {
   }, [fetchCategory]);
   return (
     <div>
-      <h1 className="text-center">Categorys</h1>
+      <h1 className="text-center">Categories</h1>
       <div className="d-flex mb-2 flex-row-reverse">
         <Link to="/admin/categories/add" className="btn btn-danger">
           Add new Category
