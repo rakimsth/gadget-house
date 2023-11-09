@@ -1,8 +1,12 @@
 const bcrypt = require("bcrypt");
 const Model = require("./user.model");
 
-const create = (payload) => {
-  return Model.create(payload);
+const create = async (payload) => {
+  const { password, roles, ...rest } = payload;
+  rest.password = await bcrypt.hash(password, +process.env.SALT_ROUNDS);
+  rest.isEmailVerified = true;
+  if (roles) rest.roles = [roles];
+  return Model.create(rest);
 };
 
 const list = async (page = 1, limit = 10, search) => {

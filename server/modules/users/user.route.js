@@ -24,6 +24,16 @@ router.get("/", secureAPI(["admin"]), async (req, res, next) => {
   }
 });
 
+router.post("/", secureAPI(["admin"]), async (req, res, next) => {
+  try {
+    req.body.created_by = req.currentUser;
+    const result = await Controller.create(req.body);
+    res.json({ data: result, msg: "success" });
+  } catch (e) {
+    next(e);
+  }
+});
+
 router.get("/profile", secureAPI(["admin", "user"]), async (req, res, next) => {
   try {
     const result = await Controller.getById(req.currentUser);
@@ -44,6 +54,8 @@ router.put(
         ? req.body.id
         : req.currentUser;
       if (!me) throw new Error("Id is missing");
+      req.body.updated_by = req.currentUser;
+      req.body.updated_at = new Date();
       const result = await Controller.updateProfile(me, req.body);
       res.json({ data: result, msg: "success" });
     } catch (e) {
@@ -81,8 +93,8 @@ router.put("/reset-password", secureAPI(["admin"]), async (req, res, next) => {
 
 router.patch("/status/:id", secureAPI(["admin"]), async (req, res, next) => {
   try {
-    req.body.created_by = req.currentUser;
     req.body.updated_by = req.currentUser;
+    req.body.updated_at = new Date();
     const result = await Controller.block(req.params.id, req.body);
     res.json({ data: result, msg: "success" });
   } catch (e) {
@@ -92,8 +104,8 @@ router.patch("/status/:id", secureAPI(["admin"]), async (req, res, next) => {
 
 router.delete("/:id", secureAPI(["admin"]), async (req, res, next) => {
   try {
-    req.body.created_by = req.currentUser;
     req.body.updated_by = req.currentUser;
+    req.body.updated_at = new Date();
     const result = await Controller.archive(req.params.id, req.body);
     res.json({ data: result, msg: "success" });
   } catch (e) {
