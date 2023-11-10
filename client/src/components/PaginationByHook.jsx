@@ -90,7 +90,10 @@ export default function Paginate({
             value={limit}
             className="form-select"
             size={"lg"}
-            onChange={(e) => setLimit(Number(e.target.value))}
+            onChange={(e) => {
+              setLimit(Number(e.target.value));
+              setCurrentPage(1);
+            }}
           >
             <option value={2}>2</option>
             <option value={4}>4</option>
