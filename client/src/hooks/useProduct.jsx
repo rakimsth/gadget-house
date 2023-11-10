@@ -10,12 +10,14 @@ const useProduct = () => {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const list = useCallback(async () => {
+  const list = useCallback(async ({ page, limit }) => {
     try {
       setLoading(true);
-      const { data } = await instance.get(URLS.PRODUCTS);
+      const { data } = await instance.get(
+        `${URLS.PRODUCTS}?page=${page}&limit=${limit}`
+      );
       setData(data?.data?.data);
-      return data?.data?.data;
+      return data?.data;
     } catch (e) {
       const errMsg = e.response ? e.response.data.msg : "something went wrong";
       setError(errMsg);

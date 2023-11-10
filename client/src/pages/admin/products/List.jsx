@@ -1,17 +1,25 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import Swal from "sweetalert2";
 import useProduct from "../../../hooks/useProduct";
+import Paginate from "../../../components/PaginationByHook";
 
 export default function ListProducts() {
   const navigate = useNavigate();
   const { data, list, remove } = useProduct();
+  const [limit, setLimit] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchProduct = useCallback(async () => {
-    await list();
-  }, [list]);
+    const result = await list({ page: currentPage, limit: limit });
+    if (result) {
+      setTotal(result.total);
+      setCurrentPage(result.page);
+    }
+  }, [list, currentPage, limit]);
 
   const handleRemove = async (id) => {
     try {
@@ -90,6 +98,13 @@ export default function ListProducts() {
           )}
         </tbody>
       </Table>
+      <Paginate
+        total={total}
+        limit={limit}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        setLimit={setLimit}
+      />
     </div>
   );
 }
