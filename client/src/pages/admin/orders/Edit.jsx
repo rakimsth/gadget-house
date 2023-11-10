@@ -1,28 +1,44 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Row,
+  Stack,
+  Table,
+} from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import useUsers from "../../../hooks/useUsers";
+import useOrders from "../../../hooks/useOrders";
+import { fetchProducts } from "../../../slices/productSlice";
 
 export default function EditOrder() {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getById, update } = useUsers();
+  const { products: allProducts } = useSelector((state) => state.products);
 
-  const [payload, setPayload] = useState({
+  const { getById, update } = useOrders();
+
+  const [order, setOrder] = useState({
     name: "",
     email: "",
-    roles: "",
+    address: "",
+    total: 0,
+    products: [],
   });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      const payload = order;
       payload.id = id;
       const result = await update(id, payload);
       if (result?.msg === "success") {
-        alert("User Updated Successfully");
-        navigate("/admin/users");
+        alert("Order Updated Successfully");
+        navigate("/admin/orders");
       }
     } catch (e) {
       alert(e);
@@ -34,6 +50,7 @@ export default function EditOrder() {
       const data = await getById(id);
       if (data) {
         const {
+          orderDate,
           isArchived,
           created_at,
           updated_at,
@@ -41,16 +58,22 @@ export default function EditOrder() {
           updated_by,
           ...rest
         } = data;
-        const { roles, ...user } = rest;
-        user.roles = roles.toString();
-        setPayload((prev) => {
-          return { ...prev, ...user };
+        setOrder((prev) => {
+          return { ...prev, ...rest };
         });
       }
     } catch (e) {
       alert(e);
     }
   }, [id, getById]);
+
+  const initFetch = useCallback(() => {
+    dispatch(fetchProducts({ limit: 1000000, page: 1 }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    initFetch();
+  }, [initFetch]);
 
   useEffect(() => {
     fetchDetail();
@@ -59,17 +82,17 @@ export default function EditOrder() {
   return (
     <Container>
       <Row>
-        <h3 className="text-center">Update User</h3>
-        <Col md={{ span: 6, offset: 3 }}>
+        <h3 className="text-center">Add new Order</h3>
+        <Col md={3}>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder=""
-                value={payload?.name}
+                placeholder="Enter Buyer Name"
+                value={order?.name}
                 onChange={(e) => {
-                  setPayload((prev) => {
+                  setOrder((prev) => {
                     return { ...prev, name: e.target.value };
                   });
                 }}
@@ -80,39 +103,96 @@ export default function EditOrder() {
               <Form.Control
                 type="email"
                 placeholder="Enter your email"
-                value={payload?.email}
+                value={order?.email}
                 onChange={(e) => {
-                  setPayload((prev) => {
+                  setOrder((prev) => {
                     return { ...prev, email: e.target.value };
                   });
                 }}
               />
             </Form.Group>
-
             <Form.Group className="mb-3">
-              <Form.Label>Roles</Form.Label>
-              <Form.Select
-                value={payload?.roles}
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your Address"
+                value={order?.address}
                 onChange={(e) => {
-                  setPayload((prev) => {
-                    return { ...prev, roles: e.target.value };
+                  setOrder((prev) => {
+                    return { ...prev, address: e.target.value };
+                  });
+                }}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Payment Method</Form.Label>
+              <Form.Select
+                value={order?.paymentMethod}
+                onChange={(e) => {
+                  setOrder((prev) => {
+                    return { ...prev, paymentMethod: e.target.value };
                   });
                 }}
               >
                 <option>Open this select menu</option>
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
+                <option value="COD">COD</option>
+                <option value="STRIPE">Stripe</option>
               </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Amount</Form.Label>
+              <Form.Control type="text" disabled value={order?.total} />
             </Form.Group>
             <Stack direction="horizontal" gap={3}>
               <Button variant="primary" className="w-50" type="submit">
                 Submit
               </Button>
-              <Link to="/admin/users" className="btn btn-danger">
+              <Link to="/admin/orders" className="btn btn-danger">
                 Go Back
               </Link>
             </Stack>
           </Form>
+        </Col>
+        <Col className="border rounded">
+          <h5 className="text-center">Products</h5>
+          <Col>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order?.products.length > 0 ? (
+                  order?.products.map((product, idx) => {
+                    return (
+                      <tr key={idx}>
+                        <td>
+                          {
+                            allProducts.find(
+                              (item) => item?._id === product?.product
+                            ).name
+                          }
+                        </td>
+                        <td>{product?.quantity}</td>
+                        <td>{product?.price}</td>
+                        <td>{product?.amount}</td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="text-center">
+                      No Products added
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </Col>
         </Col>
       </Row>
     </Container>

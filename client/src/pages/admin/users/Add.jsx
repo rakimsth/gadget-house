@@ -92,7 +92,7 @@ export default function AddUser() {
               <Button variant="primary" className="w-50" type="submit">
                 Submit
               </Button>
-              <Link to="/admin/products" className="btn btn-danger">
+              <Link to="/admin/users" className="btn btn-danger">
                 Go Back
               </Link>
             </Stack>

@@ -106,7 +106,7 @@ export default function ListOrders() {
                     <FaEdit
                       className="m-2"
                       onClick={() => {
-                        navigate(`/admin/orders/${order?._id}`);
+                        navigate(`/admin/orders/${order?.id}`);
                       }}
                     />
                     <FaTrashAlt
