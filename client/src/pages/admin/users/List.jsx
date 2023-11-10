@@ -1,18 +1,27 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { ImBlocked } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import Swal from "sweetalert2";
+
+import Paginate from "../../../components/PaginationByHook";
 import useUsers from "../../../hooks/useUsers";
 
 export default function ListUsers() {
   const navigate = useNavigate();
   const { data, block, list, remove } = useUsers();
+  const [limit, setLimit] = useState(4);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchUser = useCallback(async () => {
-    await list();
-  }, [list]);
+    const result = await list({ page: currentPage, limit: limit });
+    if (result) {
+      setTotal(result.total);
+      setCurrentPage(result.page);
+    }
+  }, [list, currentPage, limit]);
 
   const handleRemove = async (id, status) => {
     try {
@@ -127,6 +136,13 @@ export default function ListUsers() {
           )}
         </tbody>
       </Table>
+      <Paginate
+        total={total}
+        limit={limit}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        setLimit={setLimit}
+      />
     </div>
   );
 }

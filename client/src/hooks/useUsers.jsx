@@ -8,12 +8,14 @@ const useUsers = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const list = useCallback(async () => {
+  const list = useCallback(async ({ page, limit }) => {
     try {
       setLoading(true);
-      const { data } = await instance.get(URLS.USERS);
+      const { data } = await instance.get(
+        `${URLS.USERS}?page=${page}&limit=${limit}`
+      );
       setData(data?.data?.data);
-      return data.data.data;
+      return data.data;
     } catch (e) {
       const errMsg = e.response ? e.response.data.msg : "something went wrong";
       setError(errMsg);
